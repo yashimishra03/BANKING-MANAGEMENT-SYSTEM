@@ -1,101 +1,94 @@
-# BANKING-MANAGEMENT-SYSTEM
-Banking Management System using Data Structure and Algorithm- - DAA Project
+# NexBank — Banking Management System (DAA Project)
 
----
+A Banking Management System built for the *Design and Analysis of Algorithms* subject,
+demonstrating real usage of a **Linked List, Stack, Queue, Binary Search Tree, Merge Sort,
+and Binary Search** on top of a **MySQL** database, with a clean dark-themed **Streamlit** UI.
 
-## 📌 About the Project
+## 1. Project Structure
 
-Bank deal with thousands of customer accounts, deposits, withdrawls, fund transfer, and transaction management every day. Managing all these operations manually is time-consuming and increasing the chances of error.
+```
+banking_project/
+├── app.py                 # Streamlit UI (all pages/logic)
+├── db.py                  # MySQL connection + query helper
+├── data_structures.py     # Linked List, Stack, Queue, BST
+├── algorithms.py          # Merge Sort, Binary Search, Linear Search
+├── schema.sql             # MySQL schema (tables + indexes)
+├── requirements.txt
+└── .streamlit/
+    └── config.toml        # Dark theme config
+```
 
-This project automates banking activities by using appropriate data structure and algorithms subject. The system is built using python and straemlit with a MySQL database backend.The project demonstrates how choosing the right data structure drastically improves the efficiency of banking operations. For example, using a Binary Search Tree for customer search gives O(log n) time compared to O(n) for a simple linear search. Using a Stack for transaction history gives instant access to the most recent transaction, and a Queue ensures service requests are handled fairly in order.
+## 2. Prerequisites
 
+- Python 3.9+
+- MySQL Server 8.x running locally (or a remote instance)
+- VS Code with the Python extension
 
+## 3. Setup (VS Code)
 
----
+1. **Open the folder** `banking_project` in VS Code.
 
-## 🧱 Data Structures Used
+2. **Create a virtual environment** (Terminal → New Terminal):
+   ```bash
+   python -m venv venv
+   # Windows
+   venv\Scripts\activate
+   # macOS/Linux
+   source venv/bin/activate
+   ```
 
-- Linked List — Store and manage customer records — Add O(1), Delete O(n)
-- Stack — Transaction history LIFO — Push/Pop O(1)
-- Queue — Service requests FIFO — Enqueue/Dequeue O(1)
-- Binary Search Tree — Search customer by ID — O(log n) average
+3. **Install dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
----
+4. **Configure MySQL credentials.**
+   Open `db.py` and update `DB_CONFIG`, or (recommended) set environment variables
+   before running so you don't hardcode a password:
+   ```bash
+   # macOS/Linux
+   export DB_HOST=localhost
+   export DB_USER=root
+   export DB_PASSWORD=your_mysql_password
+   export DB_NAME=banking_system
 
-## ⚙️ Algorithms Used
+   # Windows (PowerShell)
+   $env:DB_HOST="localhost"
+   $env:DB_USER="root"
+   $env:DB_PASSWORD="your_mysql_password"
+   $env:DB_NAME="banking_system"
+   ```
 
-- Merge Sort — Sort customers by balance or name — O(n log n)
-- Binary Search — Search on sorted customer data — O(log n)
-- Linear Search — Baseline comparison with BST — O(n)
+5. **Create the database** (the app will also auto-create tables on first run via
+   `schema.sql`, but you can run it manually too):
+   ```bash
+   mysql -u root -p < schema.sql
+   ```
 
----
+6. **Run the app:**
+   ```bash
+   streamlit run app.py
+   ```
+   Streamlit will open the app in your browser at `http://localhost:8501`, already
+   in dark mode (set in `.streamlit/config.toml`).
 
-## 🗂️ Modules
+## 4. How the DSA Maps to the App
 
-- User Authentication — Register, Login, Logout
-- Account Details — View, Update, Close Account
-- Change Password
-- Deposit, Withdraw, Transfer Funds
-- Transaction History with Date Filter using Stack
-- Search Customer using BST vs Linear Search with timing comparison
-- Display All Customers using Linked List and Merge Sort
-- Delete Customer Record
-- Service Requests using Queue FIFO
-- Reports and Visualization with Charts
-- Time Complexity Reference Table
-- Savings and Current Account Types
-- Jupyter Notebook version with interactive menu
+| Feature                         | Data Structure / Algorithm | Where in code                     |
+|----------------------------------|-----------------------------|------------------------------------|
+| Customer list (add/delete)       | Linked List                | `data_structures.py: CustomerLinkedList` |
+| Deposit / Withdraw balance sync  | Linked List (in-memory)    | `app.py: page_deposit / page_withdraw` |
+| Transaction history (LIFO)       | Stack                      | `data_structures.py: TransactionStack` |
+| Service requests (FIFO)          | Queue                      | `data_structures.py: RequestQueue` |
+| Search customer by ID            | Binary Search Tree         | `data_structures.py: CustomerBST` |
+| Sort customers (by balance/name) | Merge Sort                 | `algorithms.py: merge_sort` |
+| Fast lookup on sorted data        | Binary Search               | `algorithms.py: binary_search` |
 
----
+## 5. Notes
 
-## 💻 Tech Stack
-
-- Backend — Python 3.9+
-- UI — Streamlit Dark Theme
-- Database — MySQL 8.0
-- Visualization — Plotly, Matplotlib, Seaborn
-- Data Processing — Pandas, NumPy
-
----
-
-## 📁 Project Structure
-
-- app.py — Streamlit UI, all pages and logic
-- db.py — MySQL connection and query helper
-- data_structures.py — Linked List, Stack, Queue, BST
-- algorithms.py — Merge Sort, Binary Search, Linear Search
-- schema.sql — MySQL database schema
-- requirements.txt — Python dependencies
-- banking_system_DAA.ipynb — Jupyter Notebook version
-- .streamlit/config.toml — Dark theme configuration
-
----
-
-## ⏱️ Time Complexity Analysis
-
-- Add customer — Linked List — O(1)
-- Delete customer — Linked List — O(n)
-- Search customer — BST — O(log n)
-- Deposit — Linked List — O(1)
-- Withdraw — Linked List — O(1)
-- Push transaction — Stack — O(1)
-- Pop transaction — Stack — O(1)
-- Add request — Queue — O(1)
-- Remove request — Queue — O(1)
-- Sort customers — Merge Sort — O(n log n)
-- Binary search — Sorted Array — O(log n)
-
----
-
-## 👨‍💻 Developed By
-
-Yashi Mishra
-DAA Project — Banking Management System
-Subject — Design and Analysis of Algorithms
-
----
-
-## 📜 License
-
-This project is licensed under the MIT License.
-
+- Passwords are hashed with SHA-256 before storage (adequate for an academic project;
+  use `bcrypt`/`argon2` for production).
+- The "Search Customer" page shows a live micro-benchmark comparing BST search vs.
+  linear search time, useful for the report's complexity analysis section.
+- The "Reports & Visualization" page lets you re-sort customers live with merge sort
+  and run a binary search against the sorted result.
